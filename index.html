@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0057)http://127.0.0.1:5500/smart%20index%20new%20platform.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <title>Smart Fruit Ordering Platform</title>
 
 <style>
@@ -46,7 +46,7 @@ header{
 }
 
 /* PAGE SYSTEM */
-.page{display:none;animation:fade .5s;}
+.page{display:none;animation:fade .1s;}
 @keyframes fade{from{opacity:0;} to{opacity:1;}}
 
 /* SLIDER */
@@ -120,23 +120,26 @@ td,th{
 
 <!-- NAVIGATION -->
 <div class="nav">
-    <a onclick="show('home')">Home</a>
-    <a onclick="show('login')">Login</a>
-    <a onclick="show('order')">Order</a>
-    <a onclick="show('tracking')">Tracking</a>
-    <a onclick="show('ai')">AI Suggest</a>
-    <a onclick="show('nutrition')">Nutrition Info</a>
-    <a onclick="show('cart')">Cart <span id="badge">0</span></a>
+    <a onclick="show(&#39;home&#39;)">Home</a>
+    <a onclick="show(&#39;login&#39;)">Login</a>
+    <a onclick="show(&#39;order&#39;)">Order</a>
+    <a onclick="show(&#39;tracking&#39;)">Tracking</a>
+    <a onclick="show(&#39;ai&#39;)">AI Suggest</a>
+    <a onclick="show(&#39;nutrition&#39;)">Nutrition Info</a>
+    <a onclick="show(&#39;cart&#39;)">Cart <span id="badge">0</span></a>
 </div>
 
 <!-- HOME PAGE -->
 <div id="home" class="page" style="display:block;">
     <div class="slider">
         <div class="track">
-            <img src="img/bute.jpg">
-            <img src="img/bute1.jpg">
-            <img src="img/om.jpg">
-            <img src="img/om1.jpg">
+            <img src="/img/bute.jpg" alt="fruit mix 1">
+            <img src="/img/bute1.jpg" alt="fruit mix 1">
+            <img src="/img/om.jpg" alt="fruit mix 1">
+            <img src="/img/om1.jpg" alt="fruit mix 1">
+            
+            
+            
         </div>
     </div>
     <h2 class="title">Fresh Fruits Delivered 🍎🍉🍊</h2>
@@ -150,9 +153,9 @@ td,th{
         <input id="address" placeholder="Address">
         <input id="email" placeholder="Email">
         <input id="pass" placeholder="Password" type="password">
-        <button onclick="alert('Login Successful')">Login</button>
+        <button onclick="alert(&#39;Login Successful&#39;)">Login</button>
         <hr>
-        <button onclick="alert('Signup Successful')">Signup</button>
+        <button onclick="alert(&#39;Signup Successful&#39;)">Signup</button>
     </div>
 </div>
 
@@ -234,13 +237,13 @@ td,th{
     <h2 class="title">Fruit Nutrition Info</h2>
     <div class="box">
         <table>
-            <tr><th>Fruit</th><th>Calories</th><th>Benefits</th></tr>
+            <tbody><tr><th>Fruit</th><th>Calories</th><th>Benefits</th></tr>
             <tr><td>Apple</td><td>52</td><td>Fiber, weight loss</td></tr>
             <tr><td>Papaya</td><td>43</td><td>Digestion, skin glow</td></tr>
             <tr><td>Banana</td><td>89</td><td>Energy, gym boost</td></tr>
             <tr><td>Orange</td><td>47</td><td>Vitamin C, immunity</td></tr>
             <tr><td>Berries</td><td>57</td><td>Antioxidants</td></tr>
-        </table>
+        </tbody></table>
     </div>
 </div>
 
@@ -248,7 +251,7 @@ td,th{
 <div id="bot" onclick="toggleBot()">💬</div>
 <div id="chatBox">
     <b>Fruit Assistant</b><br><br>
-    <input id="chatInput" placeholder="Ask here..." onkeyup="if(event.key==='Enter') reply()">
+    <input id="chatInput" placeholder="Ask here..." onkeyup="if(event.key===&#39;Enter&#39;) reply()">
     <button onclick="reply()">Send</button>
     <p id="botAns"></p>
 </div>
@@ -309,7 +312,7 @@ function updateCart(){
     let tbl="";
     let total=0;
     cart.forEach(i=>{
-        tbl+=<tr><td>${i.fruit}</td><td>${i.qty}</td><td>₹${i.price}</td></tr>;
+        tbl+=`<tr><td>${i.fruit}</td><td>${i.qty}</td><td>₹${i.price}</td></tr>`;
         total+=i.price;
     });
     cartData.innerHTML = tbl;
@@ -365,5 +368,44 @@ function reply(){
 }
 </script>
 
-</body>
-</html>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>
