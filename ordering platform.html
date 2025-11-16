@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Fruit Ordering Platform</title>
+
+<style>
+/* BASIC */
+body{
+    margin:0;
+    font-family:Verdana;
+    background:#eef2f3;
+    transition:.4s;
+}
+.dark{background:#121212;color:white;}
+
+/* HEADER */
+header{
+    position:relative;
+    background:#28a745;
+    color:white;
+    text-align:center;
+    padding:18px;
+    font-size:28px;
+    font-weight:bold;
+}
+#darkBtn{
+    position:absolute;
+    right:20px;top:20px;
+    background:black;color:white;
+    padding:7px 12px;border-radius:6px;
+    border:none;cursor:pointer;
+}
+
+/* NAVIGATION */
+.nav{
+    display:flex;justify-content:center;
+    gap:30px;padding:14px;background:white;
+    position:sticky;top:0;z-index:10;
+    box-shadow:0 0 10px #ccc;
+}
+.nav a{
+    font-size:19px;color:#28a745;
+    cursor:pointer;text-decoration:none;
+    font-weight:bold;
+}
+
+/* PAGE SYSTEM */
+.page{display:none;animation:fade .5s;}
+@keyframes fade{from{opacity:0;} to{opacity:1;}}
+
+/* SLIDER */
+.slider{width:100%;height:320px;overflow:hidden;}
+.track{
+    display:flex;width:200%;
+    animation:scroll 18s linear infinite;
+}
+.track img{width:50%;height:320px;object-fit:cover;}
+@keyframes scroll{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+}
+
+/* BOX */
+.box{
+    width:80%;margin:auto;margin-top:20px;
+    padding:20px;background:white;
+    border-radius:12px;box-shadow:0 0 12px #ccc;
+}
+.dark .box{background:#222;color:white;box-shadow:0 0 10px #000;}
+
+input,select,textarea{
+    width:100%;padding:12px;margin-top:10px;
+    border-radius:8px;border:1px solid #999;
+}
+.dark input,.dark select,.dark textarea{
+    background:#333;color:white;border:1px solid #666;
+}
+
+button{
+    background:#28a745;color:white;
+    padding:12px 20px;border:none;
+    border-radius:8px;font-size:18px;margin-top:10px;
+    cursor:pointer;
+}
+
+/* TABLE */
+table{
+    width:100%;border-collapse:collapse;
+    margin-top:10px;
+}
+td,th{
+    border:1px solid #aaa;padding:10px;
+}
+
+/* CHATBOT */
+#bot{
+    position:fixed;right:20px;bottom:20px;
+    background:#28a745;color:white;padding:14px;
+    border-radius:50%;cursor:pointer;font-size:20px;
+}
+#chatBox{
+    display:none;position:fixed;right:20px;bottom:80px;
+    width:260px;background:white;padding:15px;
+    border-radius:12px;box-shadow:0px 0px 10px #444;
+}
+.dark #chatBox{background:#333;color:white;}
+
+.title{text-align:center;font-size:32px;margin-top:20px;font-weight:bold;}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    Smart Fruit Platform
+    <button id="darkBtn" onclick="darkMode()">Dark</button>
+</header>
+
+<!-- NAVIGATION -->
+<div class="nav">
+    <a onclick="show('home')">Home</a>
+    <a onclick="show('login')">Login</a>
+    <a onclick="show('order')">Order</a>
+    <a onclick="show('tracking')">Tracking</a>
+    <a onclick="show('ai')">AI Suggest</a>
+    <a onclick="show('nutrition')">Nutrition Info</a>
+    <a onclick="show('cart')">Cart <span id="badge">0</span></a>
+</div>
+
+<!-- HOME PAGE -->
+<div id="home" class="page" style="display:block;">
+    <div class="slider">
+        <div class="track">
+            <img src="img/bute.jpg">
+            <img src="img/bute1.jpg">
+            <img src="img/om.jpg">
+            <img src="img/om1.jpg">
+        </div>
+    </div>
+    <h2 class="title">Fresh Fruits Delivered 🍎🍉🍊</h2>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+    <h2 class="title">Login / Signup</h2>
+    <div class="box">
+        <input id="name" placeholder="Full Name">
+        <input id="address" placeholder="Address">
+        <input id="email" placeholder="Email">
+        <input id="pass" placeholder="Password" type="password">
+        <button onclick="alert('Login Successful')">Login</button>
+        <hr>
+        <button onclick="alert('Signup Successful')">Signup</button>
+    </div>
+</div>
+
+<!-- ORDER PAGE -->
+<div id="order" class="page">
+    <h2 class="title">Place Your Order</h2>
+    <div class="box">
+        <h3>Select Fruit</h3>
+        <select id="fruit" onchange="showPrice()">
+            <option value="">Choose Fruit</option>
+            <option value="Apple">Apple - ₹120/kg</option>
+            <option value="Papaya">Papaya - ₹80/kg</option>
+            <option value="Banana">Banana - ₹50/kg</option>
+            <option value="Orange">Orange - ₹90/kg</option>
+            <option value="Berries">Berries - ₹200/kg</option>
+        </select>
+
+        <input id="qty" type="number" placeholder="Quantity in KG" oninput="calcBill()">
+
+        <h3 id="priceTxt">Price: ₹0</h3>
+        <h3 id="billTxt">Total Bill: ₹0</h3>
+
+        <h3>Payment Mode</h3>
+        <select id="payment">
+            <option value="">Select Payment Mode</option>
+            <option value="Cash">Cash</option>
+            <option value="UPI">UPI</option>
+            <option value="PhonePe">PhonePe</option>
+            <option value="Online">Online</option>
+        </select>
+
+        <button onclick="addCart()">Add to Cart</button>
+    </div>
+</div>
+
+<!-- CART -->
+<div id="cart" class="page">
+    <h2 class="title">Your Cart</h2>
+    <div class="box">
+        <table>
+            <thead><tr><th>Fruit</th><th>KG</th><th>Price</th></tr></thead>
+            <tbody id="cartData"></tbody>
+        </table>
+        <h3 id="finalBill"></h3>
+        <button onclick="clearCart()">Clear Cart</button>
+        <button onclick="placeOrder()">Place Order</button>
+    </div>
+</div>
+
+<!-- TRACKING -->
+<div id="tracking" class="page">
+    <h2 class="title">Order Tracking</h2>
+    <div class="box">
+        <input id="orderId" placeholder="Enter Order ID">
+        <button onclick="track()">Track</button>
+        <h3 id="trackResult"></h3>
+    </div>
+</div>
+
+<!-- AI PAGE -->
+<div id="ai" class="page">
+    <h2 class="title">AI Fruit Suggestion</h2>
+    <div class="box">
+        <input id="age" placeholder="Age">
+        <input id="weight" placeholder="Weight">
+        <select id="goal">
+            <option value="weightloss">Weight Loss</option>
+            <option value="immunity">Immunity Boost</option>
+            <option value="skin">Skin Glow</option>
+            <option value="gym">Gym Strength</option>
+        </select>
+        <button onclick="suggest()">Get Suggestion</button>
+        <h3 id="aiResult" style="color:#28a745;"></h3>
+    </div>
+</div>
+
+<!-- NUTRITION INFO PAGE -->
+<div id="nutrition" class="page">
+    <h2 class="title">Fruit Nutrition Info</h2>
+    <div class="box">
+        <table>
+            <tr><th>Fruit</th><th>Calories</th><th>Benefits</th></tr>
+            <tr><td>Apple</td><td>52</td><td>Fiber, weight loss</td></tr>
+            <tr><td>Papaya</td><td>43</td><td>Digestion, skin glow</td></tr>
+            <tr><td>Banana</td><td>89</td><td>Energy, gym boost</td></tr>
+            <tr><td>Orange</td><td>47</td><td>Vitamin C, immunity</td></tr>
+            <tr><td>Berries</td><td>57</td><td>Antioxidants</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- CHATBOT -->
+<div id="bot" onclick="toggleBot()">💬</div>
+<div id="chatBox">
+    <b>Fruit Assistant</b><br><br>
+    <input id="chatInput" placeholder="Ask here..." onkeyup="if(event.key==='Enter') reply()">
+    <button onclick="reply()">Send</button>
+    <p id="botAns"></p>
+</div>
+
+<script>
+/* PAGE SWITCH */
+function show(p){
+    document.querySelectorAll('.page').forEach(s=>s.style.display="none");
+    document.getElementById(p).style.display="block";
+    window.scrollTo(0,0);
+}
+
+/* DARK MODE */
+function darkMode(){
+    document.body.classList.toggle('dark');
+    darkBtn.innerText = document.body.classList.contains('dark') ? "Light" : "Dark";
+}
+
+/* PRICE SYSTEM */
+let prices = {
+    "Apple":120,
+    "Papaya":80,
+    "Banana":50,
+    "Orange":90,
+    "Berries":200
+};
+
+function showPrice(){
+    let f=document.getElementById("fruit").value;
+    if(f==="") return;
+    document.getElementById("priceTxt").innerHTML = "Price: ₹"+prices[f];
+    calcBill();
+}
+
+function calcBill(){
+    let f=document.getElementById("fruit").value;
+    let q=document.getElementById("qty").value;
+    if(f=="" || q=="") return;
+    let total = prices[f] * q;
+    document.getElementById("billTxt").innerHTML = "Total Bill: ₹"+total;
+}
+
+/* CART SYSTEM */
+let cart=[];
+function addCart(){
+    let f=document.getElementById("fruit").value;
+    let q=document.getElementById("qty").value;
+    let pay=document.getElementById("payment").value;
+    if(f=="" || q=="" || q==0){alert("Select fruit & qty"); return;}
+    if(pay==""){alert("Select Payment Mode"); return;}
+
+    cart.push({fruit:f, qty:q, price:prices[f]*q, payment:pay});
+    alert("Added to cart!");
+    updateCart();
+}
+
+function updateCart(){
+    let tbl="";
+    let total=0;
+    cart.forEach(i=>{
+        tbl+=<tr><td>${i.fruit}</td><td>${i.qty}</td><td>₹${i.price}</td></tr>;
+        total+=i.price;
+    });
+    cartData.innerHTML = tbl;
+    finalBill.innerHTML = "Final Bill: ₹" + total;
+    badge.innerHTML = cart.length;
+}
+
+function clearCart(){
+    cart=[];
+    updateCart();
+}
+
+function placeOrder(){
+    if(cart.length==0){alert("Cart is empty!"); return;}
+    alert("Order Placed Successfully! ✅");
+    cart=[];
+    updateCart();
+}
+
+/* TRACKING SYSTEM */
+function track(){
+    let id=document.getElementById("orderId").value;
+    if(id==""){alert("Enter ID");return;}
+    let stages = ["Order Placed ✔","Packed ✔","Out for Delivery 🚚","Delivered ✔"];
+    let msg = stages[Math.floor(Math.random()*4)];
+    document.getElementById("trackResult").innerHTML = "Status: "+msg;
+}
+
+/* AI */
+function suggest(){
+    let g=document.getElementById("goal").value;
+    let m="";
+    if(g=="weightloss") m="Apple, Papaya, Watermelon";
+    if(g=="immunity") m="Orange, Kiwi, Amla";
+    if(g=="skin") m="Pomegranate, Berries";
+    if(g=="gym") m="Banana, Dates";
+    aiResult.innerHTML = "Recommended: "+m;
+}
+
+/* CHATBOT */
+function toggleBot(){
+    chatBox.style.display = (chatBox.style.display=="block")?"none":"block";
+}
+
+function reply(){
+    let q=chatInput.value.toLowerCase();
+    let ans="";
+    if(q.includes("apple")) ans="Apple is great for weight loss.";
+    else if(q.includes("banana")) ans="Banana gives instant energy!";
+    else if(q.includes("best")) ans="Best fruits: Berries, Apple, Orange.";
+    else ans="I am a Fruit Bot, ask me fruit queries!";
+    botAns.innerHTML = ans;
+}
+</script>
+
+</body>
+</html>
